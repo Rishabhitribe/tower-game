@@ -5,24 +5,41 @@ const updateServerData = (data, engine) => {
   const Http = new XMLHttpRequest();
   const url = "https://e1bd-14-97-1-234.ngrok.io/api/userGame/update";
   Http.open("POST", url);
+  // Http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  Http.setRequestHeader("Content-type", "application/json");
   const newData = {
     gamename: "tower-game",
     username: getUsername(engine),
     scoreData: data,
   };
+  console.log("NEW DATA", newData);
   Http.send(newData);
 };
 
 const startApi = (data, engine) => {
   const Http = new XMLHttpRequest();
   const url = "https://e1bd-14-97-1-234.ngrok.io/api/userGame/start";
+  // var formData = new FormData();
+
+  // formData.append("gamename", "tower-game");
+  // formData.append("username", getUsername(engine));
+  // formData.append("scoreData", JSON.stringify(data));
+
   Http.open("POST", url);
+  Http.setRequestHeader("Content-type", "application/json");
+  // var xhr = new XMLHttpRequest();
+  // xhr.open("POST", "somewhere", true);
+  Http.onload = function () {
+    // do something to response
+    console.log(this.responseText);
+  };
   const newData = {
     gamename: "tower-game",
     username: getUsername(engine),
     scoreData: data,
   };
-  Http.send(newData);
+  console.log("NEW DATA", newData);
+  Http.send(JSON.stringify(newData));
 };
 
 export const checkMoveDown = (engine) =>
@@ -32,12 +49,12 @@ export const getUsername = (engine) => {
   const fetchId = engine.getVariable(constant.userId);
 
   if (fetchId) {
-    return fetchId;
+    return fetchId ?? "rishabh";
   } else {
     let urlString = window.location.href;
     let userId = urlString.split("?")[1];
     engine.setVariable(constant.userId, userId);
-    return userId;
+    return userId ?? "rishabh";
   }
 };
 
