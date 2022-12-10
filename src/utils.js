@@ -1,9 +1,11 @@
 import * as constant from "./constant";
 // import updateGameDataApi from "./api";
+const baseUrl2 = "http://3.110.144.68:3000";
+const baseUrl1 = "https://e1bd-14-97-1-234.ngrok.io";
 
 const updateServerData = (data, engine) => {
   const Http = new XMLHttpRequest();
-  const url = "https://e1bd-14-97-1-234.ngrok.io/api/userGame/update";
+  const url = baseUrl1 + "/api/userGame/update";
   Http.open("POST", url);
   // Http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   Http.setRequestHeader("Content-type", "application/json");
@@ -13,12 +15,12 @@ const updateServerData = (data, engine) => {
     scoreData: data,
   };
   console.log("NEW DATA", newData);
-  Http.send(newData);
+  Http.send(JSON.stringify(newData));
 };
 
 const startApi = (data, engine) => {
   const Http = new XMLHttpRequest();
-  const url = "https://e1bd-14-97-1-234.ngrok.io/api/userGame/start";
+  const url = baseUrl1 + "/api/userGame/start";
   // var formData = new FormData();
 
   // formData.append("gamename", "tower-game");
