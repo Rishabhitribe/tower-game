@@ -9,9 +9,6 @@ import * as constant from "./constant";
 import { startAnimate, endAnimate } from "./animateFuncs";
 
 window.TowerGame = (option = {}) => {
-  let urlString = window.location.href;
-  let userId = urlString.split("?")[1];
-  engine.setVariable(constant.userId, userId);
   const { width, height, canvasId, soundOn } = option;
   const game = new Engine({
     canvasId,

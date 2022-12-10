@@ -3,7 +3,17 @@ import * as constant from "./constant";
 export const checkMoveDown = (engine) =>
   engine.checkTimeMovement(constant.moveDownMovement);
 
-export const getUserId = (engine) => engine.getVariable(constant.userId);
+export const getUserId = (engine) => {
+  const fetchId = engine.getVariable(constant.userId);
+  if (fetchId) {
+    return fetchId;
+  } else {
+    let urlString = window.location.href;
+    let userId = urlString.split("?")[1];
+    engine.setVariable(constant.userId, userId);
+    return userId;
+  }
+};
 
 export const getMoveDownValue = (engine, store) => {
   const pixelsPerFrame = store
