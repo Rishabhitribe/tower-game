@@ -1,4 +1,5 @@
 export const gameStartNow = "GAME_START_NOW";
+export const serverConnected = "SERVER_CONNECTED";
 export const gameUserOption = "GAME_USER_OPTION";
 export const hardMode = "HARD_MODE";
 export const userId = "USER_ID";

@@ -1,10 +1,36 @@
 import * as constant from "./constant";
+// import updateGameDataApi from "./api";
+
+const updateServerData = (data, engine) => {
+  const Http = new XMLHttpRequest();
+  const url = "https://e1bd-14-97-1-234.ngrok.io/api/userGame/update";
+  Http.open("POST", url);
+  const newData = {
+    gamename: "tower-game",
+    username: getUsername(engine),
+    scoreData: data,
+  };
+  Http.send(newData);
+};
+
+const startApi = (data, engine) => {
+  const Http = new XMLHttpRequest();
+  const url = "https://e1bd-14-97-1-234.ngrok.io/api/userGame/start";
+  Http.open("POST", url);
+  const newData = {
+    gamename: "tower-game",
+    username: getUsername(engine),
+    scoreData: data,
+  };
+  Http.send(newData);
+};
 
 export const checkMoveDown = (engine) =>
   engine.checkTimeMovement(constant.moveDownMovement);
 
-export const getUserId = (engine) => {
+export const getUsername = (engine) => {
   const fetchId = engine.getVariable(constant.userId);
+
   if (fetchId) {
     return fetchId;
   } else {
@@ -148,7 +174,9 @@ export const addSuccessCount = (engine) => {
     );
   }
   if (setGameSuccess) setGameSuccess(success);
-  // TODO: pick floors data from here, success here
+
+  // updateGameDataApi({ floor: success,  });
+  updateServerData({ floor: success }, engine);
 };
 
 export const addFailedCount = (engine) => {
@@ -165,7 +193,7 @@ export const addFailedCount = (engine) => {
     engine.setVariable(constant.gameStartNow, false);
   }
 
-  // TODO: pick lives lost data here (failed)
+  updateServerData({ lostLives: failed }, engine);
 };
 
 export const addScore = (engine, isPerfect) => {
@@ -189,10 +217,22 @@ export const addScore = (engine, isPerfect) => {
   console.log("Last perfect Count", lastPerfectCount);
   console.log("perfect Count", perfect);
   console.log("socre", score);
-  // TODO: Pick total perfect count, current score and perfect streak from here
+  updateServerData(
+    {
+      perfectCount: perfect,
+      score: score,
+      perfectStreak: engine.getVariable(constant.perfectStreak, 0),
+    },
+    engine
+  );
 };
 
 export const drawYellowString = (engine, option) => {
+  const gameStarted = engine.getVariable(constant.serverConnected, false);
+  if (!gameStarted) {
+    engine.setVariable(constant.serverConnected, true);
+    startApi({ lostLives: 0 }, engine);
+  }
   const {
     string,
     size,
